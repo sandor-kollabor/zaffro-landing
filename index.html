@@ -3,248 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaffro — AI értékesítési ügynök WooCommerce-hez</title>
-    <meta name="description" content="Zaffro AI alkudozik, kupont generál és lezárja az üzletet — éjjel-nappal. WooCommerce plugin, 15 perc alatt telepíthető.">
-    <meta property="og:title" content="Zaffro — AI értékesítési ügynök WooCommerce-hez">
-    <meta property="og:description" content="Alkudozik, kupont generál, és egy kattintással checkoutol. Éjjel-nappal.">
-    <meta property="og:url" content="https://zaffro.ai">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-    <link rel="stylesheet" href="style.css">
+    <title>Zaffro | AI Értékesítési Asszisztens WooCommerce-hez</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zaffro: '#17817C',
+                        zaffroHover: '#126962',
+                        zaffroLight: '#E8F5F4',
+                        darkText: '#1a1a1a',
+                        lightText: '#666666'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-gray-50 font-sans text-darkText antialiased">
 
-<!-- NAV -->
-<nav class="nav">
-    <div class="nav__inner">
-        <a href="/" class="nav__logo">⚡ Zaffro</a>
-        <div class="nav__links">
-            <a href="#hogyan">Hogyan működik</a>
-            <a href="#arak">Árak</a>
-            <a href="#gyik">GYIK</a>
-        </div>
-        <a href="#arak" class="btn btn--sm">Kipróbálom →</a>
-    </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-    <div class="container">
-        <div class="badge">🚀 MVP · Korlátozott early access</div>
-        <h1>Az AI, aki<br><span class="highlight">helyetted értékesít</span><br>éjjel-nappal</h1>
-        <p class="hero__sub">
-            Zaffro települ a WooCommerce webshopodba, megismeri a termékeidet,<br>
-            alkudozik a vevőkkel, kupont generál — és lezárja az üzletet.<br>
-            Te reggel felébredsz, a rendelés már beérkezett.
-        </p>
-        <div class="hero__cta">
-            <a href="#arak" class="btn btn--primary btn--lg">Megnézem az árakat →</a>
-            <a href="#hogyan" class="btn btn--ghost btn--lg">Hogyan működik?</a>
-        </div>
-        <div class="hero__proof">
-            <span>✅ 15 perc telepítés</span>
-            <span>✅ Nem kell szerver</span>
-            <span>✅ 30 napos pénzvisszafizetés</span>
-        </div>
-    </div>
-</section>
-
-<!-- PAIN -->
-<section class="pain">
-    <div class="container">
-        <div class="pain__grid">
-            <div class="pain__item">
-                <div class="pain__icon">😴</div>
-                <p>A vevő este 10-kor kérdez — <strong>te alszol</strong></p>
+    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-zaffro rounded-md flex items-center justify-center text-white font-bold text-xl">Z</div>
+                <span class="font-bold text-xl tracking-tight text-zaffro">zaffro.ai</span>
             </div>
-            <div class="pain__item">
-                <div class="pain__icon">💸</div>
-                <p>Alkudni tudnál, de <strong>nincs időd</strong> minden vevővel foglalkozni</p>
-            </div>
-            <div class="pain__item">
-                <div class="pain__icon">🛒</div>
-                <p>A vevő érdeklődik, de <strong>otthagyja a kosarat</strong> válasz nélkül</p>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-lightText">
+                <a href="#funkciok" class="hover:text-zaffro transition">Funkciók</a>
+                <a href="#celcsoport" class="hover:text-zaffro transition">Kinek ajánljuk?</a>
+                <a href="#arazas" class="hover:text-zaffro transition">Árazás</a>
+                <a href="#gyik" class="hover:text-zaffro transition">GYIK</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <a href="#arazas" class="bg-zaffro hover:bg-zaffroHover text-white text-sm font-semibold py-2 px-4 rounded-lg transition shadow-sm">Ingyenes Telepítés</a>
             </div>
         </div>
-        <div class="pain__arrow">↓ Zaffro megoldja</div>
-    </div>
-</section>
+    </header>
 
-<!-- HOW IT WORKS -->
-<section class="how" id="hogyan">
-    <div class="container">
-        <h2>Hogyan működik?</h2>
-        <p class="section__sub">Három lépés az első AI-lezárt üzletig</p>
-        <div class="steps">
-            <div class="step">
-                <div class="step__num">1</div>
-                <h3>Telepítés &amp; beállítás</h3>
-                <p>Töltsd fel a plugint, add meg az AI API kulcsot, írd le a boltod személyiségét. 15 perc, nem kell fejlesztő.</p>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col lg:flex-row items-center gap-12 overflow-hidden">
+        <div class="flex-1 text-center lg:text-left z-10">
+            <div class="inline-block bg-zaffroLight text-zaffro font-semibold px-3 py-1 rounded-full text-sm mb-6 border border-zaffro/20">
+                🚀 Működik WooCommerce 7.0+ webshopokkal
             </div>
-            <div class="step">
-                <div class="step__num">2</div>
-                <h3>Az ügynök dolgozik</h3>
-                <p>Zaffro megismeri a termékeidet és az áraidat. Chaten, emailen, WhatsAppon — válaszol, bemutat, alkudozik a szabályaid szerint.</p>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                A te fáradhatatlan <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-zaffro to-teal-400">értékesítő asszisztensed.</span>
+            </h1>
+            <p class="text-lg text-lightText mb-8 max-w-2xl mx-auto lg:mx-0">
+                Éjjel-nappal bemutatja a termékeket, válaszol a kérdésekre, alkudozik, és automatikusan zárja az üzletet. Növeld a konverziót egyetlen gombnyomással.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a href="#arazas" class="bg-zaffro hover:bg-zaffroHover text-white text-lg font-semibold py-3 px-8 rounded-xl transition shadow-lg shadow-zaffro/30">Próbáld ki 30 napos garanciával</a>
+                <a href="#funkciok" class="bg-white border-2 border-gray-200 hover:border-zaffro hover:text-zaffro text-gray-700 text-lg font-semibold py-3 px-8 rounded-xl transition">Miben más a Zaffro?</a>
             </div>
-            <div class="step">
-                <div class="step__num">3</div>
-                <h3>Automatikus checkout</h3>
-                <p>Ha megegyeztek: Zaffro generál egy kupont, és a vevőnek elég egy kattintás — a kedvezmény automatikusan levonódik a kasszánál.</p>
+            <p class="mt-4 text-sm text-gray-500">Bankkártya megadása szükséges a hitelesítéshez • 15 perces beállítás</p>
+        </div>
+
+        <div class="flex-1 w-full max-w-md relative z-10">
+            <div class="absolute inset-0 bg-gradient-to-tr from-zaffroLight to-teal-100 rounded-full blur-3xl opacity-70 -z-10 transform scale-110 translate-y-10"></div>
+
+            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[550px]">
+                <div class="bg-zaffro text-white p-4 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">Z</div>
+                    <div>
+                        <h3 class="font-bold leading-tight">Zaffro Ügynök</h3>
+                        <p class="text-xs text-white/80">Online</p>
+                    </div>
+                </div>
+
+                <div class="p-4 flex-1 overflow-y-auto flex flex-col gap-4 bg-gray-50 text-sm">
+                    <div class="flex gap-2 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
+                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
+                            Szia! Miben segíthetek ma? Nézted már a prémium bonsai fáinkat? 🌿
+                        </div>
+                    </div>
+                    <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
+                        <div class="bg-zaffro text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
+                            Igen, nagyon tetszik a Ficus Ginseng, de drágállom a 25 000 Ft-ot. Tudnál adni kedvezményt?
+                        </div>
+                    </div>
+                    <div class="flex gap-2 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
+                        <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm">
+                            Mivel ez egy gyönyörű több éves példány, sokat nem tudok engedni, de mit szólsz <strong>22 500 Ft</strong>-hoz?
+                        </div>
+                    </div>
+                    <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
+                        <div class="bg-zaffro text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
+                            Rendben, ez így tökéletes, elfogadom!
+                        </div>
+                    </div>
+                    <div class="flex gap-2 max-w-[85%]">
+                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
+                        <div class="bg-zaffroLight text-darkText p-3 rounded-2xl rounded-tl-none border border-zaffro/20">
+                            Szuper! Hozzáadtam a kedvezményt a kosaradhoz. Itt tudod véglegesíteni a rendelést:
+
+                            <div class="mt-3 text-center">
+                                <div class="bg-white border border-gray-200 p-2 rounded-lg shadow-sm mb-2 text-left">
+                                    <p class="text-xs text-gray-500">Megegyezés megszületett</p>
+                                    <p class="font-bold text-zaffro text-xs">Ficus Ginseng (10% kupon)</p>
+                                </div>
+                                <button class="w-full bg-zaffro hover:bg-zaffroHover text-white font-bold py-2 px-4 rounded-lg shadow transition">
+                                    Egy kattintásos fizetés
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-white border-t border-gray-100 flex gap-2">
+                    <input type="text" placeholder="Írj egy üzenetet..." class="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 text-sm outline-none focus:border-zaffro transition">
+                    <button class="w-10 h-10 bg-zaffro text-white rounded-full flex items-center justify-center hover:bg-zaffroHover transition">➤</button>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </main>
 
-<!-- FEATURES -->
-<section class="features">
-    <div class="container">
-        <h2>Amit tud</h2>
-        <div class="features__grid">
-            <div class="feature">
-                <div class="feature__icon">🤝</div>
-                <h4>Valódi alkudozás</h4>
-                <p>Ismeri a terméked minimum árát. Nem ad többet annál — de odáig elmegy.</p>
+    <section class="bg-white border-y border-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-sm font-semibold text-zaffro uppercase tracking-wider mb-4">Kutatások alapján</p>
+            <p class="text-lg text-lightText max-w-3xl mx-auto">
+                "A vásárlók <strong>46%-a</strong> nyitott az AI-alapú értékesítési asszisztensekre." A Zaffro ezt a bizonyított élményt hozza el a Te webshopodba, valós fizetési infrastruktúrával és emberi vevőkkel.
+            </p>
+        </div>
+    </section>
+
+    <section id="funkciok" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-darkText mb-4">Miben más a Zaffro?</h2>
+                <p class="text-lightText max-w-2xl mx-auto">Nem egy egyszerű chatbot, hanem egy teljes értékű értékesítési infrastruktúra.</p>
             </div>
-            <div class="feature">
-                <div class="feature__icon">🎟️</div>
-                <h4>Automatikus kupon</h4>
-                <p>Megállapodás után azonnal generál egy egyszer használatos WooCommerce kupont.</p>
-            </div>
-            <div class="feature">
-                <div class="feature__icon">🛒</div>
-                <h4>Egy kattintásos checkout</h4>
-                <p>A vevő kap egy linket — rákattint, a termék és a kupon automatikusan a kosárban van.</p>
-            </div>
-            <div class="feature">
-                <div class="feature__icon">🤖</div>
-                <h4>AI vevő detektálás</h4>
-                <p>Ha egy másik AI alkuszik veled, Zaffro észreveszi és erősebb modellre vált. Nincs kiszolgáltatottság.</p>
-            </div>
-            <div class="feature">
-                <div class="feature__icon">📱</div>
-                <h4>Több csatorna</h4>
-                <p>Chat widget, email, Facebook Messenger, WhatsApp — ugyanaz az ügynök, mindenhol.</p>
-            </div>
-            <div class="feature">
-                <div class="feature__icon">🧠</div>
-                <h4>Saját személyiség</h4>
-                <p>Te írod az ügynök hangját, stílusát, szabályait. Nem érzi magát robotnak a vevő.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🤝</div>
+                    <h3 class="font-bold text-lg mb-2">Segítőkész értékesítő</h3>
+                    <p class="text-lightText text-sm">Bemutatja a terméket, válaszol, tanácsot ad, majd természetes módon zárja az üzletet.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">⚡</div>
+                    <h3 class="font-bold text-lg mb-2">Egy kattintásos Checkout</h3>
+                    <p class="text-lightText text-sm">Az alku végén a vevő azonnal a fizetési oldalra jut, a kedvezménnyel a kosarában.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🛡️</div>
+                    <h3 class="font-bold text-lg mb-2">AI-vevő detektálás</h3>
+                    <p class="text-lightText text-sm">Felismeri a botokat (7 heurisztika alapján) és azonnal szigorúbb védekezési modellre vált.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition relative overflow-hidden">
+                    <div class="absolute top-3 right-3 bg-teal-100 text-zaffro text-xs font-bold px-2 py-0.5 rounded-full">Hamarosan</div>
+                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🧾</div>
+                    <h3 class="font-bold text-lg mb-2">Automatikus E-számla</h3>
+                    <p class="text-lightText text-sm">Számlázz.hu integráció: minden tranzakció azonnal, jogszabályoknak megfelelően kerül lekönyvelésre.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- PRICING -->
-<section class="pricing" id="arak">
-    <div class="container">
-        <h2>Egyszerű árazás</h2>
-        <p class="section__sub">Nincs setup díj. 30 napos pénzvisszafizetési garancia.</p>
-        <div class="pricing__grid">
+    <section id="celcsoport" class="py-20 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-center mb-16">Kinek ideális választás?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center">
+                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">🪴</div>
+                    <h3 class="text-xl font-bold mb-3">Kézművesek és Niche márkák</h3>
+                    <p class="text-lightText text-sm">Nincs időd minden érdeklődővel egyénileg egyeztetni éjjel? A Zaffro ismeri a termékedet és megköti az üzletet helyetted.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">🏢</div>
+                    <h3 class="text-xl font-bold mb-3">B2B és Kis nagykereskedők</h3>
+                    <p class="text-lightText text-sm">Azonnali válasz az ajánlatkérésekre. Nagyobb tételek, rendszeres alkuk és egyedi ajánlatok menedzselése 0-24 órában.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">💚</div>
+                    <h3 class="text-xl font-bold mb-3">Társadalmi vállalkozások (NGO)</h3>
+                    <p class="text-lightText text-sm">Személyes kapcsolat tartása fenntartható módon. Számotokra készítettük a nulla belépési korlátos forgalomalapú csomagot.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="pricing__card">
-                <div class="pricing__name">Starter</div>
-                <div class="pricing__price">$39<span>/hó</span></div>
-                <div class="pricing__desc">Egy webshophoz. Minden alapfunkció.</div>
-                <ul class="pricing__features">
-                    <li>✅ Chat widget</li>
-                    <li>✅ Gemini AI (flash modell)</li>
-                    <li>✅ Alku + automatikus kupon</li>
-                    <li>✅ Egy kattintásos checkout</li>
-                    <li>✅ AI vevő detektálás</li>
-                    <li>✅ Email csatorna</li>
-                    <li>⬜ WhatsApp / Messenger</li>
-                    <li>⬜ Pro modellek (Gemini Pro, Claude)</li>
+    <section id="arazas" class="py-20 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-darkText mb-4">Átlátható árazás minden méretre</h2>
+                <p class="text-lightText">30 napos pénzvisszafizetési garancia minden csomagra.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+                <!-- Free - Hamarosan -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 flex flex-col relative overflow-hidden opacity-75">
+                    <div class="absolute top-3 right-3 bg-gray-100 text-gray-500 text-xs font-bold px-2 py-0.5 rounded-full">Hamarosan</div>
+                    <h3 class="text-xl font-bold mb-2">Free</h3>
+                    <p class="text-lightText text-sm mb-4">Induló boltoknak tesztelésre.</p>
+                    <div class="text-4xl font-extrabold mb-6">$0<span class="text-base font-normal text-lightText">/hó</span></div>
+                    <ul class="text-sm space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-2">✔️ Havi ~50 alku</li>
+                        <li class="flex items-center gap-2">✔️ Gemini Flash modell</li>
+                        <li class="flex items-center gap-2">✔️ Web chat csatorna</li>
+                        <li class="flex items-center gap-2">✔️ Automatikus fizetés</li>
+                    </ul>
+                    <button disabled class="w-full border-2 border-gray-300 text-gray-400 font-bold py-2 rounded-xl cursor-not-allowed">Hamarosan elérhető</button>
+                </div>
+
+                <!-- Starter -->
+                <div class="bg-zaffro rounded-2xl p-6 shadow-xl border border-zaffro text-white flex flex-col transform md:-translate-y-4">
+                    <div class="text-xs font-bold uppercase tracking-wider bg-white/20 inline-block px-2 py-1 rounded mb-2 self-start">Legnépszerűbb</div>
+                    <h3 class="text-xl font-bold mb-2">Starter</h3>
+                    <p class="text-white/80 text-sm mb-4">Növekvő forgalomhoz.</p>
+                    <div class="text-4xl font-extrabold mb-6">$39<span class="text-base font-normal text-white/80">/hó</span></div>
+                    <ul class="text-sm space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-2">✔️ Chat widget</li>
+                        <li class="flex items-center gap-2">✔️ Gemini Flash modell</li>
+                        <li class="flex items-center gap-2">✔️ Alku + automatikus kupon</li>
+                        <li class="flex items-center gap-2">✔️ Egy kattintásos checkout</li>
+                        <li class="flex items-center gap-2">✔️ AI vevő detektálás</li>
+                        <li class="flex items-center gap-2">✔️ Email csatorna</li>
+                    </ul>
+                    <a href="https://zaffro.lemonsqueezy.com/checkout/buy/9757a35f-cac8-4898-98fb-aa15756b3d01" class="w-full bg-white text-zaffro font-bold py-2 rounded-xl hover:bg-gray-100 transition shadow text-center block">Kiválasztom</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">Pro</h3>
+                    <p class="text-lightText text-sm mb-4">Maximalizált konverzió.</p>
+                    <div class="text-4xl font-extrabold mb-6">$59<span class="text-base font-normal text-lightText">/hó</span></div>
+                    <ul class="text-sm space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-2">✔️ Pro modellek (Gemini Pro, Claude)</li>
+                        <li class="flex items-center gap-2">✔️ Alku + automatikus kupon</li>
+                        <li class="flex items-center gap-2">✔️ Egy kattintásos checkout</li>
+                        <li class="flex items-center gap-2">✔️ AI vevő detektálás</li>
+                        <li class="flex items-center gap-2">✔️ WhatsApp + Messenger</li>
+                        <li class="flex items-center gap-2">✔️ Prioritásos support</li>
+                    </ul>
+                    <a href="https://zaffro.lemonsqueezy.com/checkout/buy/bc53439f-76bd-4345-9a63-a5ec657f1105" class="w-full border-2 border-zaffro text-zaffro font-bold py-2 rounded-xl hover:bg-zaffroLight transition text-center block">Kiválasztom</a>
+                </div>
+
+                <!-- Social -->
+                <div class="bg-gradient-to-br from-white to-zaffroLight rounded-2xl p-6 shadow-sm border border-teal-200 flex flex-col relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-zaffro text-white text-xs font-bold px-3 py-1 rounded-bl-lg">NGO</div>
+                    <h3 class="text-xl font-bold mb-2">Social</h3>
+                    <p class="text-lightText text-sm mb-4">Mi akkor keresünk, ha te is.</p>
+                    <div class="text-3xl font-extrabold mb-6 text-zaffro">$9<span class="text-base font-normal text-lightText">/hó</span> <span class="text-xl">+ 1.5%</span></div>
+                    <ul class="text-sm space-y-3 mb-8 flex-1">
+                        <li class="flex items-center gap-2">✔️ Korlátlan alku (Flash)</li>
+                        <li class="flex items-center gap-2">✔️ Csak sikeres alku után fizetsz</li>
+                        <li class="flex items-center gap-2">✔️ Társadalmi vállalkozásoknak</li>
+                        <li class="flex items-center gap-2">✔️ Személyes onboarding</li>
+                    </ul>
+                    <a href="mailto:sandor@kollabor.org?subject=Zaffro Social csomag érdeklődés" class="w-full border-2 border-zaffro text-zaffro font-bold py-2 rounded-xl hover:bg-white transition text-center block">Érdeklődöm</a>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center max-w-3xl mx-auto bg-zaffroLight border border-zaffro/20 rounded-xl p-4">
+                <p class="text-sm text-darkText font-medium">
+                    <span class="mr-2">🔑</span> <strong>Haladó felhasználó vagy?</strong> Hamarosan: használd a saját LLM API kulcsodat (BYOK) és kapj akár <strong>~50% kedvezményt</strong> a havidíjból!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gyik" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-center mb-12">Gyakran Ismételt Kérdések</h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-5">
+                    <h3 class="font-bold text-lg mb-2">Milyen rendszerekkel működik a Zaffro?</h3>
+                    <p class="text-lightText text-sm">Jelenleg a WooCommerce (7.0+) és a WordPress (6.0+) rendszerekkel integrálható teljesen natívan. PHP 8.0+ szükséges a futtatáshoz.</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-5">
+                    <h3 class="font-bold text-lg mb-2">Mi történik, ha a bot túl nagy kedvezményt adna?</h3>
+                    <p class="text-lightText text-sm">Biztonságban vagy. Te állítod be az admin felületen a maximális engedmény mértékét (akár rendszerszinten, akár termékenként), a Zaffro ezen sosem megy túl.</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-5">
+                    <h3 class="font-bold text-lg mb-2">Biztonságban vannak a vevőim adatai?</h3>
+                    <p class="text-lightText text-sm">Igen! A chat adatok a te helyi WordPress adatbázisodban maradnak, külső szerverre nem kerülnek hosszú távú tárolásra.</p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-5">
+                    <h3 class="font-bold text-lg mb-2">Hogyan történik a számlázás?</h3>
+                    <p class="text-lightText text-sm">A licenc és az előfizetés kezelését a Lemon Squeezy végzi, amiről automatikus számlát kapsz. Magyar B2B számlázáshoz írj nekünk: <a href="mailto:sandor@kollabor.org" class="text-zaffro hover:underline">sandor@kollabor.org</a></p>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-5">
+                    <h3 class="font-bold text-lg mb-2">Kell hozzá szerver vagy fejlesztő?</h3>
+                    <p class="text-lightText text-sm">Nem. Zaffro egy sima WordPress plugin — feltöltöd, aktiválod, beállítod az API kulcsokat. 15 perc, nem kell fejlesztő vagy külön szerver.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-zaffro">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Készen állsz, hogy megduplázd a konverziódat?</h2>
+            <p class="text-white/80 text-lg mb-8">Telepítsd az AI értékesítési asszisztenst 15 perc alatt, és hagyd, hogy növelje a bevételeidet.</p>
+            <a href="#arazas" class="inline-block bg-white text-zaffro font-extrabold text-lg py-4 px-10 rounded-xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105">
+                Telepítem a WooCommerce boltomban
+            </a>
+            <p class="text-white/60 text-sm mt-6">30 napos pénzvisszafizetési garancia • Bankkártya szükséges a regisztrációhoz</p>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="col-span-1 md:col-span-1">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="w-6 h-6 bg-zaffro rounded text-white flex items-center justify-center font-bold text-sm">Z</div>
+                    <span class="font-bold text-lg text-zaffro">zaffro.ai</span>
+                </div>
+                <p class="text-sm text-lightText mb-4">
+                    KOLLABOR — 2026<br>
+                    Közös Pont Egyesület
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-darkText">Termék</h4>
+                <ul class="text-sm text-lightText space-y-2">
+                    <li><a href="#arazas" class="hover:text-zaffro transition">Árazás</a></li>
+                    <li><a href="https://github.com/sandor-kollabor/zaffroai/blob/main/INSTALL.md" target="_blank" class="hover:text-zaffro transition">Telepítési Útmutató</a></li>
+                    <li><a href="#gyik" class="hover:text-zaffro transition">GYIK</a></li>
                 </ul>
-                <a href="https://zaffro.lemonsqueezy.com/checkout/buy/9757a35f-cac8-4898-98fb-aa15756b3d01" class="btn btn--outline btn--full">
-                    Starter megvásárlása →
-                </a>
             </div>
-
-            <div class="pricing__card pricing__card--featured">
-                <div class="pricing__badge">Legnépszerűbb</div>
-                <div class="pricing__name">Pro</div>
-                <div class="pricing__price">$59<span>/hó</span></div>
-                <div class="pricing__desc">Komolyabb forgalomhoz, több csatornával.</div>
-                <ul class="pricing__features">
-                    <li>✅ Chat widget</li>
-                    <li>✅ <strong>Pro modellek</strong> (Gemini Pro, Claude)</li>
-                    <li>✅ Alku + automatikus kupon</li>
-                    <li>✅ Egy kattintásos checkout</li>
-                    <li>✅ AI vevő detektálás</li>
-                    <li>✅ Email csatorna</li>
-                    <li>✅ <strong>WhatsApp + Messenger</strong></li>
-                    <li>✅ <strong>Prioritásos support</strong></li>
+            <div>
+                <h4 class="font-bold mb-4 text-darkText">Jogi információk</h4>
+                <ul class="text-sm text-lightText space-y-2">
+                    <li><a href="mailto:sandor@kollabor.org?subject=ÁSZF kérés" class="hover:text-zaffro transition">Általános Szerződési Feltételek</a></li>
+                    <li><a href="mailto:sandor@kollabor.org?subject=Adatvédelmi kérés" class="hover:text-zaffro transition">Adatvédelmi Nyilatkozat</a></li>
                 </ul>
-                <a href="https://zaffro.lemonsqueezy.com/checkout/buy/bc53439f-76bd-4345-9a63-a5ec657f1105" class="btn btn--primary btn--full">
-                    Pro megvásárlása →
-                </a>
             </div>
-
-        </div>
-        <p class="pricing__note">
-            Társadalmi vállalkozás vagy NGO vagy? <a href="mailto:sandor@kollabor.org">Írj nekünk</a> — van forgalomalapú csomagunk.
-        </p>
-    </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq" id="gyik">
-    <div class="container">
-        <h2>Gyakori kérdések</h2>
-        <div class="faq__list">
-            <details class="faq__item">
-                <summary>Kell hozzá fejlesztő vagy szerver?</summary>
-                <p>Nem. Zaffro egy sima WordPress plugin — feltöltöd, aktiválod, beállítod az API kulcsokat. Kész. Saját szerver nem kell, az AI hívásokat a Google és Anthropic szerverei kezelik.</p>
-            </details>
-            <details class="faq__item">
-                <summary>Melyik AI modellt használja?</summary>
-                <p>Alapból Google Gemini 2.5 Flash modellt (gyors és olcsó). Ha az AI vevő detektálás aktiválódik, automatikusan erősebb modellre vált. Pro csomagban Claude (Anthropic) is elérhető.</p>
-            </details>
-            <details class="faq__item">
-                <summary>Mi van, ha az AI rossz árat ad?</summary>
-                <p>Minden termékhez beállítasz egy minimum árat. Ez alá Zaffro soha nem megy — ez a kód szintjén van megkötve, nem csak a promptban.</p>
-            </details>
-            <details class="faq__item">
-                <summary>Működik változó termékekkel (pl. méret, szín)?</summary>
-                <p>A változó termékek (variációk) támogatása a következő sprintben (V1.1) érkezik. Jelenleg egyszerű termékekkel működik a rendszer.</p>
-            </details>
-            <details class="faq__item">
-                <summary>Mit jelent a 30 napos garancia?</summary>
-                <p>Ha az első 30 napban bármilyen okból nem vagy elégedett, visszaadjuk a teljes összeget. Kérdés nélkül.</p>
-            </details>
-            <details class="faq__item">
-                <summary>Hány webshopra aktiválhatom?</summary>
-                <p>Egy licenc = egy WordPress telepítés. Ha több shophoz kell, minden shophoz külön licenc szükséges.</p>
-            </details>
-        </div>
-    </div>
-</section>
-
-<!-- CTA BANNER -->
-<section class="cta-banner">
-    <div class="container">
-        <h2>Indíts el egy AI ügynököt a boltodban</h2>
-        <p>15 perc telepítés. 30 napos pénzvisszafizetési garancia. Nincs kockázat.</p>
-        <a href="#arak" class="btn btn--primary btn--lg">Megnézem az árakat →</a>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer__inner">
-            <div class="footer__brand">
-                <strong>⚡ Zaffro</strong>
-                <span>by <a href="https://kollabor.hu" target="_blank">KOLLABOR</a></span>
-            </div>
-            <div class="footer__links">
-                <a href="mailto:sandor@kollabor.org">Kapcsolat</a>
-                <a href="#gyik">GYIK</a>
+            <div>
+                <h4 class="font-bold mb-4 text-darkText">Kapcsolat</h4>
+                <ul class="text-sm text-lightText space-y-2">
+                    <li><a href="mailto:sandor@kollabor.org" class="hover:text-zaffro transition">sandor@kollabor.org</a></li>
+                    <li><a href="https://kollabor.hu" target="_blank" class="hover:text-zaffro transition">kollabor.hu</a></li>
+                </ul>
             </div>
         </div>
-        <p class="footer__copy">© 2026 KOLLABOR. Minden jog fenntartva.</p>
-    </div>
-</footer>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-center text-sm text-lightText">
+            &copy; 2026 Zaffro.ai — Minden jog fenntartva. Fejlesztette: <a href="https://kollabor.hu" class="hover:text-zaffro transition">KOLLABOR</a>
+        </div>
+    </footer>
 
-<script src="script.js"></script>
 </body>
 </html>
