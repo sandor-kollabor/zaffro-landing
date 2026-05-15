@@ -1,349 +1,1121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaffro | AI Értékesítési Asszisztens WooCommerce-hez</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        zaffro: '#17817C',
-                        zaffroHover: '#126962',
-                        zaffroLight: '#E8F5F4',
-                        darkText: '#1a1a1a',
-                        lightText: '#666666'
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zaffro — AI értékesítési asszisztens</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    /* Zafír — primary */
+    --sapphire:        oklch(0.40 0.16 258);
+    --sapphire-deep:   oklch(0.22 0.13 258);
+    --sapphire-darker: oklch(0.16 0.10 260);
+    --sapphire-light:  oklch(0.62 0.13 245);
+    --sapphire-mist:   oklch(0.94 0.04 245);
+    --saffron:         oklch(0.74 0.16 72);
+
+    /* Neutrals */
+    --ink:        oklch(0.18 0.012 65);
+    --ink-soft:   oklch(0.34 0.010 65);
+    --ink-faint:  oklch(0.55 0.008 65);
+    --paper:      oklch(0.99 0.005 80);
+    --paper-warm: oklch(0.97 0.008 75);
+    --rule:       oklch(0.88 0.010 70);
+    --rule-soft:  oklch(0.94 0.008 70);
+
+    --sans:    "Sora", system-ui, sans-serif;
+    --serif:   "Instrument Serif", Georgia, serif;
+    --mono:    "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--sapphire); color: white; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+  .wrap-narrow { max-width: 920px; margin: 0 auto; padding: 0 32px; }
+
+  /* ─── NAV ───────────────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklch, var(--paper) 92%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .nav-inner {
+    display: flex; align-items: center; gap: 32px;
+    padding: 16px 32px;
+    max-width: 1240px; margin: 0 auto;
+  }
+  .nav-brand {
+    display: inline-flex; align-items: center;
+    font: 700 22px/1 var(--sans); letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .nav-links {
+    display: flex; gap: 28px; margin-left: auto;
+    font: 500 14px/1 var(--sans);
+    color: var(--ink-soft);
+  }
+  .nav-links a:hover { color: var(--sapphire); }
+  .nav-cta {
+    background: var(--sapphire); color: white;
+    padding: 10px 18px; border-radius: 999px;
+    font: 600 14px/1 var(--sans);
+    transition: background 0.15s ease;
+  }
+  .nav-cta:hover { background: var(--sapphire-deep); }
+
+  /* ─── HERO ──────────────────────────────────────────────── */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--rule);
+    background:
+      radial-gradient(ellipse 800px 600px at 80% -10%, color-mix(in oklch, var(--sapphire-mist) 60%, transparent), transparent 70%),
+      var(--paper);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 72px;
+    align-items: center;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+  }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: oklch(0.65 0.16 145);
+    box-shadow: 0 0 0 3px color-mix(in oklch, oklch(0.65 0.16 145) 25%, transparent);
+  }
+  .hero h1 {
+    font: 600 76px/1.02 var(--sans);
+    letter-spacing: -0.035em;
+    margin: 24px 0 20px;
+    text-wrap: balance;
+  }
+  .hero h1 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--sapphire);
+    letter-spacing: -0.005em;
+  }
+  .hero-lede {
+    font: 400 19px/1.55 var(--sans);
+    color: var(--ink-soft);
+    max-width: 52ch;
+    margin: 0 0 32px;
+    text-wrap: pretty;
+  }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 600 15px/1 var(--sans);
+    padding: 16px 24px; border-radius: 999px;
+    transition: transform 0.12s ease, background 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--sapphire); color: white; }
+  .btn-primary:hover { background: var(--sapphire-deep); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn .arr { transition: transform 0.15s ease; }
+  .btn:hover .arr { transform: translateX(3px); }
+  .hero-foot {
+    margin-top: 22px;
+    font: 400 13px/1.4 var(--mono); color: var(--ink-faint);
+    letter-spacing: 0.01em;
+  }
+  .hero-foot::before {
+    content: "·"; margin-right: 10px; color: var(--sapphire);
+  }
+
+  /* ─── CHAT MOCK ─────────────────────────────────────────── */
+  .chat {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow:
+      0 30px 60px -30px color-mix(in oklch, var(--sapphire-deep) 40%, transparent),
+      0 8px 24px -12px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .chat-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 4px 8px 14px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .chat-head .ag {
+    width: 38px; height: 38px;
+    background: var(--sapphire);
+    border-radius: 10px;
+    display: grid; place-items: center;
+  }
+  .chat-head .ag svg { display: block; }
+  .chat-head .info { flex: 1; }
+  .chat-head .name { font: 600 14px/1.2 var(--sans); }
+  .chat-head .sub { font: 400 12px/1.3 var(--sans); color: var(--ink-faint); margin-top: 2px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chat-head .sub .live {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: oklch(0.65 0.16 145);
+  }
+  .chat-body {
+    padding: 18px 6px 6px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .msg {
+    display: flex; align-items: flex-end; gap: 10px;
+    max-width: 88%;
+  }
+  .msg .av {
+    width: 26px; height: 26px; flex: 0 0 auto;
+    background: var(--sapphire);
+    border-radius: 7px;
+    display: grid; place-items: center;
+  }
+  .msg .av svg { display: block; }
+  .msg .bub {
+    background: var(--paper-warm);
+    border: 1px solid var(--rule-soft);
+    padding: 11px 15px;
+    border-radius: 16px 16px 16px 4px;
+    font: 400 14px/1.45 var(--sans);
+    color: var(--ink);
+  }
+  .msg .bub b { font-weight: 600; color: var(--sapphire); }
+  .msg.me { margin-left: auto; }
+  .msg.me .bub {
+    background: var(--sapphire);
+    color: white;
+    border: none;
+    border-radius: 16px 16px 4px 16px;
+  }
+  .deal-card {
+    margin: 14px 6px 6px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .deal-card .deal-head {
+    background: var(--sapphire-mist);
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 8px;
+    font: 500 12px/1 var(--mono);
+    color: var(--sapphire-deep);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-bottom: 1px solid color-mix(in oklch, var(--sapphire-mist) 60%, var(--rule));
+  }
+  .deal-card .deal-head svg { width: 14px; height: 14px; }
+  .deal-card .deal-body {
+    padding: 14px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .deal-card .item {
+    font: 500 14px/1.3 var(--sans); color: var(--ink);
+  }
+  .deal-card .item small {
+    display: block;
+    font: 400 12px/1.4 var(--mono); color: var(--saffron);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+  .deal-card .pay {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--sapphire); color: white;
+    padding: 10px 14px; border-radius: 10px;
+    font: 600 13px/1 var(--sans);
+    flex: 0 0 auto;
+  }
+
+  /* ─── STAT ──────────────────────────────────────────────── */
+  .stat {
+    background: var(--sapphire-darker);
+    color: white;
+    padding: 96px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 90% 50%, color-mix(in oklch, var(--sapphire-light) 30%, transparent), transparent 60%);
+    pointer-events: none;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+  }
+  .stat .num {
+    font: 600 200px/0.9 var(--sans);
+    letter-spacing: -0.05em;
+    color: var(--sapphire-light);
+    margin: 0;
+    position: relative;
+    display: inline-block;
+  }
+  .stat .num .pct {
+    font-size: 80px;
+    color: white;
+    margin-left: 6px;
+    vertical-align: top;
+    margin-top: 12px;
+    display: inline-block;
+  }
+  .stat-eyebrow {
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sapphire-light);
+    margin-bottom: 16px;
+  }
+  .stat h2 {
+    font: 600 36px/1.2 var(--sans);
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .stat h2 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--sapphire-light);
+  }
+  .stat p {
+    font: 400 17px/1.55 var(--sans);
+    color: color-mix(in oklch, white 75%, var(--sapphire-light));
+    max-width: 56ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ─── SECTION ───────────────────────────────────────────── */
+  .section { padding: 120px 0; border-bottom: 1px solid var(--rule); }
+  .section.warm { background: var(--paper-warm); }
+  .sec-head { margin-bottom: 64px; max-width: 720px; }
+  .sec-num {
+    font: 500 12px/1 var(--mono);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sapphire);
+    margin-bottom: 18px;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .sec-num::before {
+    content: ""; display: inline-block;
+    width: 24px; height: 1px; background: var(--sapphire);
+  }
+  .sec-h2 {
+    font: 600 56px/1.05 var(--sans);
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .sec-h2 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--sapphire);
+  }
+  .sec-sub {
+    font: 400 19px/1.5 var(--sans);
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* ─── FEATURES ──────────────────────────────────────────── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .feat {
+    background: var(--paper);
+    padding: 36px 28px;
+    display: flex; flex-direction: column;
+    position: relative;
+    min-height: 320px;
+  }
+  .feat .feat-num {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.16em;
+    color: var(--sapphire);
+  }
+  .feat .feat-icon {
+    margin: 32px 0 28px;
+  }
+  .feat h3 {
+    font: 600 22px/1.2 var(--sans);
+    letter-spacing: -0.015em;
+    margin: 0 0 10px;
+  }
+  .feat p {
+    font: 400 14px/1.55 var(--sans);
+    color: var(--ink-soft);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .feat .soon {
+    position: absolute; top: 24px; right: 24px;
+    font: 500 10px/1 var(--mono);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--saffron);
+    background: color-mix(in oklch, var(--saffron) 12%, transparent);
+    padding: 5px 8px; border-radius: 4px;
+  }
+
+  /* ─── AUDIENCE ──────────────────────────────────────────── */
+  .audience {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .aud {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 36px 32px 40px;
+    display: flex; flex-direction: column; gap: 20px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .aud:hover { border-color: var(--sapphire); transform: translateY(-2px); }
+  .aud .aud-tag {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .aud h3 {
+    font: 600 24px/1.2 var(--sans);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .aud h3 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--sapphire);
+  }
+  .aud p {
+    font: 400 15px/1.55 var(--sans);
+    color: var(--ink-soft);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .aud-mark {
+    width: 64px; height: 1px; background: var(--sapphire);
+  }
+
+  /* ─── PRICING ───────────────────────────────────────────── */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .price {
+    background: var(--paper);
+    padding: 36px 28px 32px;
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .price.featured { background: var(--sapphire-darker); color: white; }
+  .price.featured .price-amount,
+  .price.featured h3 { color: white; }
+  .price.featured .price-sub,
+  .price.featured ul li { color: color-mix(in oklch, white 78%, var(--sapphire-light)); }
+  .price.featured .price-cta {
+    background: white; color: var(--sapphire-deep);
+  }
+  .price.featured .price-cta:hover { background: var(--sapphire-light); color: white; }
+
+  .price-tag {
+    position: absolute; top: 18px; right: 18px;
+    font: 500 10px/1 var(--mono);
+    letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 5px 8px; border-radius: 4px;
+  }
+  .price-tag.popular {
+    background: var(--saffron); color: white;
+  }
+  .price-tag.soon {
+    color: var(--saffron);
+    background: color-mix(in oklch, var(--saffron) 12%, transparent);
+  }
+  .price-tag.ngo {
+    color: oklch(0.55 0.14 145);
+    background: color-mix(in oklch, oklch(0.65 0.16 145) 12%, transparent);
+  }
+  .price h3 {
+    font: 600 22px/1 var(--sans);
+    letter-spacing: -0.015em;
+    margin: 0 0 4px;
+  }
+  .price-sub {
+    font: 400 13px/1.4 var(--sans);
+    color: var(--ink-faint);
+    margin: 0 0 28px;
+  }
+  .price-amount {
+    font: 600 56px/1 var(--sans);
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .price-amount .per {
+    font: 400 16px/1 var(--sans);
+    color: var(--ink-faint);
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+  .price.featured .price-amount .per {
+    color: color-mix(in oklch, white 60%, var(--sapphire-light));
+  }
+  .price-extra {
+    font: 400 13px/1.4 var(--sans);
+    color: var(--ink-faint);
+    margin: 0 0 24px;
+    min-height: 18px;
+  }
+  .price ul {
+    list-style: none; padding: 0; margin: 0 0 28px;
+    display: flex; flex-direction: column; gap: 10px;
+    font: 400 14px/1.4 var(--sans);
+    color: var(--ink-soft);
+    flex: 1;
+  }
+  .price ul li {
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .price ul li::before {
+    content: ""; flex: 0 0 auto;
+    width: 14px; height: 14px;
+    margin-top: 4px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'><path d='M3 7.5 L6 10 L11 4' stroke='%231A3F8F' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .price.featured ul li::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'><path d='M3 7.5 L6 10 L11 4' stroke='%237DA8FF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  }
+  .price-cta {
+    background: var(--sapphire); color: white;
+    padding: 12px 18px; border-radius: 10px;
+    font: 600 14px/1 var(--sans);
+    text-align: center;
+    transition: background 0.15s ease;
+  }
+  .price-cta:hover { background: var(--sapphire-deep); }
+  .price-cta.disabled {
+    background: var(--paper-warm); color: var(--ink-faint);
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+
+  .price-foot {
+    margin-top: 32px;
+    padding: 22px 26px;
+    background: color-mix(in oklch, var(--sapphire-mist) 50%, var(--paper));
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    font: 400 14px/1.5 var(--sans);
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 14px;
+  }
+  .price-foot strong { color: var(--ink); }
+  .price-foot .key {
+    font: 500 18px/1 var(--mono); color: var(--sapphire);
+  }
+
+  /* ─── FAQ ───────────────────────────────────────────────── */
+  .faq-list {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--rule);
+  }
+  details.faq-item {
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 4px;
+  }
+  details.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 24px;
+    font: 500 19px/1.4 var(--sans);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item .icon {
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    border: 1px solid var(--rule);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  details.faq-item .icon::before { content: "+"; font: 400 18px/1 var(--sans); color: var(--ink-soft); }
+  details.faq-item[open] .icon { background: var(--sapphire); border-color: var(--sapphire); }
+  details.faq-item[open] .icon::before { content: "−"; color: white; }
+  details.faq-item .a {
+    font: 400 16px/1.6 var(--sans);
+    color: var(--ink-soft);
+    margin: 14px 0 0;
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+
+  /* ─── FINAL CTA ─────────────────────────────────────────── */
+  .final-cta {
+    background: var(--sapphire-darker);
+    color: white;
+    padding: 140px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 800px 500px at 50% 100%, color-mix(in oklch, var(--sapphire-light) 25%, transparent), transparent 60%),
+      radial-gradient(ellipse 400px 300px at 15% 0%, color-mix(in oklch, var(--saffron) 18%, transparent), transparent 70%);
+  }
+  .final-cta-inner { position: relative; text-align: center; }
+  .final-cta h2 {
+    font: 600 80px/1.02 var(--sans);
+    letter-spacing: -0.04em;
+    margin: 0 auto 28px;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  .final-cta h2 em {
+    font-family: var(--serif); font-style: italic; font-weight: 400;
+    color: var(--sapphire-light);
+  }
+  .final-cta p {
+    font: 400 18px/1.5 var(--sans);
+    color: color-mix(in oklch, white 75%, var(--sapphire-light));
+    max-width: 56ch;
+    margin: 0 auto 40px;
+  }
+  .final-cta .btn-primary {
+    background: white; color: var(--sapphire-deep);
+    padding: 18px 28px; font-size: 16px;
+  }
+  .final-cta .btn-primary:hover { background: var(--sapphire-light); color: white; }
+  .final-cta .foot {
+    margin-top: 24px;
+    font: 400 13px/1.4 var(--mono);
+    color: color-mix(in oklch, white 60%, var(--sapphire-light));
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── FOOTER ────────────────────────────────────────────── */
+  .footer {
+    background: var(--ink);
+    color: color-mix(in oklch, white 70%, var(--ink-faint));
+    padding: 80px 0 36px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 56px;
+    margin-bottom: 56px;
+  }
+  .footer-brand {
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .footer-brand .badge {
+    display: inline-flex; align-items: center;
+    color: white;
+  }
+  .footer-tag {
+    font: 400 14px/1.5 var(--sans);
+    color: color-mix(in oklch, white 60%, var(--ink-faint));
+    max-width: 32ch;
+  }
+  .footer h4 {
+    font: 500 11px/1 var(--mono);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: white;
+    margin: 0 0 18px;
+  }
+  .footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font: 400 14px/1.4 var(--sans); }
+  .footer ul a:hover { color: var(--sapphire-light); }
+  .footer-bottom {
+    border-top: 1px solid color-mix(in oklch, white 14%, transparent);
+    padding-top: 28px;
+    display: flex; justify-content: space-between; gap: 24px;
+    font: 400 12px/1.4 var(--mono);
+    color: color-mix(in oklch, white 50%, var(--ink-faint));
+  }
+
+  /* ─── RESPONSIVE ────────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .features { grid-template-columns: repeat(2, 1fr); }
+    .pricing { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 820px) {
+    .hero h1 { font-size: 52px; }
+    .sec-h2, .final-cta h2 { font-size: 40px; }
+    .stat .num { font-size: 140px; }
+    .stat .num .pct { font-size: 56px; }
+    .hero-grid, .stat-grid { grid-template-columns: 1fr; gap: 56px; }
+    .audience, .features, .pricing { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  }
+</style>
 </head>
-<body class="bg-gray-50 font-sans text-darkText antialiased">
 
-    <header class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-zaffro rounded-md flex items-center justify-center text-white font-bold text-xl">Z</div>
-                <span class="font-bold text-xl tracking-tight text-zaffro">zaffro.ai</span>
-            </div>
-            <nav class="hidden md:flex gap-8 text-sm font-medium text-lightText">
-                <a href="#funkciok" class="hover:text-zaffro transition">Funkciók</a>
-                <a href="#celcsoport" class="hover:text-zaffro transition">Kinek ajánljuk?</a>
-                <a href="#arazas" class="hover:text-zaffro transition">Árazás</a>
-                <a href="#gyik" class="hover:text-zaffro transition">GYIK</a>
-            </nav>
-            <div class="flex items-center gap-4">
-                <a href="#arazas" class="bg-zaffro hover:bg-zaffroHover text-white text-sm font-semibold py-2 px-4 rounded-lg transition shadow-sm">Ingyenes Telepítés</a>
-            </div>
+<body>
+
+<!-- Reusable mark + breathing-wordmark SVGs are inlined below in the page itself. -->
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <!-- Cut gem (Soft) + zaffro.ai wordmark -->
+      <svg width="32" height="32" viewBox="0 0 100 100" aria-hidden="true" style="margin-right: 10px;">
+        <g transform="rotate(45 50 50)">
+          <rect x="16" y="16" width="68" height="68" rx="14" fill="var(--sapphire)" />
+        </g>
+        <path d="M22 28 L78 28 L78 37 L44 63 L78 63 L78 72 L22 72 L22 63 L56 37 L22 37 Z" fill="var(--paper)" />
+      </svg>
+      <span style="font: 700 22px/1 var(--sans); letter-spacing: -0.025em; color: var(--ink);">zaffro<span style="color: var(--sapphire); font-weight: 500; opacity: 0.78;">.ai</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#funkciok">Funkciók</a>
+      <a href="#celcsoport">Kinek</a>
+      <a href="#arazas">Árazás</a>
+      <a href="#gyik">GYIK</a>
+    </div>
+    <a class="nav-cta" href="#arazas">Ingyenes telepítés</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="pill"><span class="dot"></span>Működik WooCommerce 7.0+ webshopokkal</span>
+        <h1>A te <em>fáradhatatlan</em> értékesítő asszisztensed.</h1>
+        <p class="hero-lede">
+          Éjjel-nappal bemutatja a termékeket, válaszol a kérdésekre, alkudozik,
+          és automatikusan zárja az üzletet. Egyetlen gombnyomásra a checkouton.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#arazas">
+            Próbáld ki 30 napos garanciával
+            <svg class="arr" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8 L13 8 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a class="btn btn-ghost" href="#funkciok">Miben más?</a>
         </div>
-    </header>
+        <div class="hero-foot">Bankkártya megadása a hitelesítéshez · 15 perces beállítás</div>
+      </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col lg:flex-row items-center gap-12 overflow-hidden">
-        <div class="flex-1 text-center lg:text-left z-10">
-            <div class="inline-block bg-zaffroLight text-zaffro font-semibold px-3 py-1 rounded-full text-sm mb-6 border border-zaffro/20">
-                🚀 Működik WooCommerce 7.0+ webshopokkal
-            </div>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
-                A te fáradhatatlan <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-zaffro to-teal-400">értékesítő asszisztensed.</span>
-            </h1>
-            <p class="text-lg text-lightText mb-8 max-w-2xl mx-auto lg:mx-0">
-                Éjjel-nappal bemutatja a termékeket, válaszol a kérdésekre, alkudozik, és automatikusan zárja az üzletet. Növeld a konverziót egyetlen gombnyomással.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <a href="#arazas" class="bg-zaffro hover:bg-zaffroHover text-white text-lg font-semibold py-3 px-8 rounded-xl transition shadow-lg shadow-zaffro/30">Próbáld ki 30 napos garanciával</a>
-                <a href="#funkciok" class="bg-white border-2 border-gray-200 hover:border-zaffro hover:text-zaffro text-gray-700 text-lg font-semibold py-3 px-8 rounded-xl transition">Miben más a Zaffro?</a>
-            </div>
-            <p class="mt-4 text-sm text-gray-500">Bankkártya megadása szükséges a hitelesítéshez • 15 perces beállítás</p>
+      <!-- ─ Chat mock ───────────────────────────────────── -->
+      <div class="chat" aria-hidden="true">
+        <div class="chat-head">
+          <div class="ag" style="background: transparent;">
+            <svg width="38" height="38" viewBox="0 0 100 100" fill="none">
+              <g transform="rotate(45 50 50)">
+                <rect x="16" y="16" width="68" height="68" rx="14" fill="var(--sapphire)" />
+              </g>
+              <path d="M22 28 L78 28 L78 37 L44 63 L78 63 L78 72 L22 72 L22 63 L56 37 L22 37 Z" fill="var(--paper)" />
+            </svg>
+          </div>
+          <div class="info">
+            <div class="name">Zaffro Ügynök</div>
+            <div class="sub"><span class="live"></span>Online · átlag 12 mp válasz</div>
+          </div>
         </div>
-
-        <div class="flex-1 w-full max-w-md relative z-10">
-            <div class="absolute inset-0 bg-gradient-to-tr from-zaffroLight to-teal-100 rounded-full blur-3xl opacity-70 -z-10 transform scale-110 translate-y-10"></div>
-
-            <div class="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[550px]">
-                <div class="bg-zaffro text-white p-4 flex items-center gap-3">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">Z</div>
-                    <div>
-                        <h3 class="font-bold leading-tight">Zaffro Ügynök</h3>
-                        <p class="text-xs text-white/80">Online</p>
-                    </div>
-                </div>
-
-                <div class="p-4 flex-1 overflow-y-auto flex flex-col gap-4 bg-gray-50 text-sm">
-                    <div class="flex gap-2 max-w-[85%]">
-                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-gray-100">
-                            Szia! Miben segíthetek ma? Nézted már a prémium bonsai fáinkat? 🌿
-                        </div>
-                    </div>
-                    <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
-                        <div class="bg-zaffro text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
-                            Igen, nagyon tetszik a Ficus Ginseng, de drágállom a 25 000 Ft-ot. Tudnál adni kedvezményt?
-                        </div>
-                    </div>
-                    <div class="flex gap-2 max-w-[85%]">
-                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
-                        <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm">
-                            Mivel ez egy gyönyörű több éves példány, sokat nem tudok engedni, de mit szólsz <strong>22 500 Ft</strong>-hoz?
-                        </div>
-                    </div>
-                    <div class="flex gap-2 max-w-[85%] self-end flex-row-reverse">
-                        <div class="bg-zaffro text-white p-3 rounded-2xl rounded-tr-none shadow-sm">
-                            Rendben, ez így tökéletes, elfogadom!
-                        </div>
-                    </div>
-                    <div class="flex gap-2 max-w-[85%]">
-                        <div class="w-8 h-8 rounded-full bg-zaffro flex-shrink-0 flex items-center justify-center text-white font-bold text-xs">Z</div>
-                        <div class="bg-zaffroLight text-darkText p-3 rounded-2xl rounded-tl-none border border-zaffro/20">
-                            Szuper! Hozzáadtam a kedvezményt a kosaradhoz. Itt tudod véglegesíteni a rendelést:
-
-                            <div class="mt-3 text-center">
-                                <div class="bg-white border border-gray-200 p-2 rounded-lg shadow-sm mb-2 text-left">
-                                    <p class="text-xs text-gray-500">Megegyezés megszületett</p>
-                                    <p class="font-bold text-zaffro text-xs">Ficus Ginseng (10% kupon)</p>
-                                </div>
-                                <button class="w-full bg-zaffro hover:bg-zaffroHover text-white font-bold py-2 px-4 rounded-lg shadow transition">
-                                    Egy kattintásos fizetés
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-3 bg-white border-t border-gray-100 flex gap-2">
-                    <input type="text" placeholder="Írj egy üzenetet..." class="flex-1 bg-gray-50 border border-gray-200 rounded-full px-4 text-sm outline-none focus:border-zaffro transition">
-                    <button class="w-10 h-10 bg-zaffro text-white rounded-full flex items-center justify-center hover:bg-zaffroHover transition">➤</button>
-                </div>
+        <div class="chat-body">
+          <div class="msg">
+            <div class="av" style="background: transparent;">
+              <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                <g transform="rotate(45 50 50)">
+                  <rect x="16" y="16" width="68" height="68" rx="14" fill="var(--sapphire)" />
+                </g>
+                <path d="M22 28 L78 28 L78 37 L44 63 L78 63 L78 72 L22 72 L22 63 L56 37 L22 37 Z" fill="var(--paper)" />
+              </svg>
             </div>
+            <div class="bub">Szia! Miben segíthetek? Nézted már a prémium bonsai fáinkat?</div>
+          </div>
+          <div class="msg me">
+            <div class="bub">Tetszik a Ficus Ginseng, de drágállom a 25&nbsp;000 Ft-ot. Tudnál engedni?</div>
+          </div>
+          <div class="msg">
+            <div class="av" style="background: transparent;">
+              <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                <g transform="rotate(45 50 50)">
+                  <rect x="16" y="16" width="68" height="68" rx="14" fill="var(--sapphire)" />
+                </g>
+                <path d="M22 28 L78 28 L78 37 L44 63 L78 63 L78 72 L22 72 L22 63 L56 37 L22 37 Z" fill="var(--paper)" />
+              </svg>
+            </div>
+            <div class="bub">Több éves példány — sokat nem, de mit szólsz <b>22&nbsp;500 Ft</b>-hoz?</div>
+          </div>
+          <div class="msg me">
+            <div class="bub">Rendben, elfogadom!</div>
+          </div>
+          <div class="deal-card">
+            <div class="deal-head">
+              <svg viewBox="0 0 14 14" fill="none">
+                <path d="M3 7.5 L6 10 L11 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Megegyezés megszületett
+            </div>
+            <div class="deal-body">
+              <div class="item">Ficus Ginseng<small>10% kupon · 22&nbsp;500 Ft</small></div>
+              <a class="pay" href="#">Egy kattintásos fizetés
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6 L10 6 M7 3 L10 6 L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
-    </main>
+      </div>
 
-    <section class="bg-white border-y border-gray-100 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm font-semibold text-zaffro uppercase tracking-wider mb-4">Kutatások alapján</p>
-            <p class="text-lg text-lightText max-w-3xl mx-auto">
-                "A vásárlók <strong>46%-a</strong> nyitott az AI-alapú értékesítési asszisztensekre." A Zaffro ezt a bizonyított élményt hozza el a Te webshopodba, valós fizetési infrastruktúrával és emberi vevőkkel.
-            </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STAT BLOCK ═══════════════════════════════════════════ -->
+<section class="stat">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="num">46<span class="pct">%</span></div>
+      <div>
+        <div class="stat-eyebrow">Kutatások alapján</div>
+        <h2>A vásárlók közel fele <em>nyitott</em> az AI-alapú értékesítésre.</h2>
+        <p>
+          Az Anthropic 2025-ös <em>Project Deal</em> kísérletében AI-ügynökök 186 üzletet zártak
+          $4&nbsp;000+ értékben — Slack-en, emberi felügyelet mellett. A Zaffro ezt a bizonyított élményt
+          hozza el a Te webshopodba, valós fizetési infrastruktúrával és emberi vevőkkel.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═════════════════════════════════════════════ -->
+<section class="section" id="funkciok">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01 · Funkciók</div>
+      <h2 class="sec-h2">Miben <em>más</em> a Zaffro?</h2>
+      <p class="sec-sub">Nem egy egyszerű chatbot, hanem teljes értékesítési infrastruktúra.</p>
+    </div>
+
+    <div class="features">
+
+      <div class="feat">
+        <span class="feat-num">F·01</span>
+        <div class="feat-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <circle cx="22" cy="22" r="21" stroke="var(--sapphire)" stroke-width="1.5" stroke-dasharray="2 4"/>
+            <path d="M14 24 Q22 32 30 24" stroke="var(--sapphire)" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <circle cx="16" cy="18" r="1.6" fill="var(--sapphire)"/>
+            <circle cx="28" cy="18" r="1.6" fill="var(--sapphire)"/>
+          </svg>
         </div>
-    </section>
+        <h3>Segítőkész értékesítő</h3>
+        <p>Bemutatja a terméket, válaszol, tanácsot ad — majd természetes módon zárja az üzletet.</p>
+      </div>
 
-    <section id="funkciok" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold text-darkText mb-4">Miben más a Zaffro?</h2>
-                <p class="text-lightText max-w-2xl mx-auto">Nem egy egyszerű chatbot, hanem egy teljes értékű értékesítési infrastruktúra.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🤝</div>
-                    <h3 class="font-bold text-lg mb-2">Segítőkész értékesítő</h3>
-                    <p class="text-lightText text-sm">Bemutatja a terméket, válaszol, tanácsot ad, majd természetes módon zárja az üzletet.</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">⚡</div>
-                    <h3 class="font-bold text-lg mb-2">Egy kattintásos Checkout</h3>
-                    <p class="text-lightText text-sm">Az alku végén a vevő azonnal a fizetési oldalra jut, a kedvezménnyel a kosarában.</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🛡️</div>
-                    <h3 class="font-bold text-lg mb-2">AI-vevő detektálás</h3>
-                    <p class="text-lightText text-sm">Felismeri a botokat (7 heurisztika alapján) és azonnal szigorúbb védekezési modellre vált.</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition relative overflow-hidden">
-                    <div class="absolute top-3 right-3 bg-teal-100 text-zaffro text-xs font-bold px-2 py-0.5 rounded-full">Hamarosan</div>
-                    <div class="w-12 h-12 bg-zaffroLight rounded-lg flex items-center justify-center text-zaffro text-2xl mb-4">🧾</div>
-                    <h3 class="font-bold text-lg mb-2">Automatikus E-számla</h3>
-                    <p class="text-lightText text-sm">Számlázz.hu integráció: minden tranzakció azonnal, jogszabályoknak megfelelően kerül lekönyvelésre.</p>
-                </div>
-            </div>
+      <div class="feat">
+        <span class="feat-num">F·02</span>
+        <div class="feat-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="6" y="14" width="32" height="22" rx="3" stroke="var(--sapphire)" stroke-width="1.5"/>
+            <path d="M6 22 L38 22" stroke="var(--sapphire)" stroke-width="1.5"/>
+            <path d="M22 8 L26 14 L22 14 L26 14 L22 14" stroke="var(--saffron)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="rotate(15 22 11)"/>
+            <circle cx="22" cy="29" r="2.5" fill="var(--saffron)"/>
+          </svg>
         </div>
-    </section>
+        <h3>Egy kattintásos checkout</h3>
+        <p>Az alku végén a vevő azonnal a fizetési oldalon van — kuponnal a kosarában.</p>
+      </div>
 
-    <section id="celcsoport" class="py-20 bg-white border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-center mb-16">Kinek ideális választás?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <div class="text-center">
-                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">🪴</div>
-                    <h3 class="text-xl font-bold mb-3">Kézművesek és Niche márkák</h3>
-                    <p class="text-lightText text-sm">Nincs időd minden érdeklődővel egyénileg egyeztetni éjjel? A Zaffro ismeri a termékedet és megköti az üzletet helyetted.</p>
-                </div>
-                <div class="text-center">
-                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">🏢</div>
-                    <h3 class="text-xl font-bold mb-3">B2B és Kis nagykereskedők</h3>
-                    <p class="text-lightText text-sm">Azonnali válasz az ajánlatkérésekre. Nagyobb tételek, rendszeres alkuk és egyedi ajánlatok menedzselése 0-24 órában.</p>
-                </div>
-                <div class="text-center">
-                    <div class="bg-zaffroLight w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-6 shadow-inner">💚</div>
-                    <h3 class="text-xl font-bold mb-3">Társadalmi vállalkozások (NGO)</h3>
-                    <p class="text-lightText text-sm">Személyes kapcsolat tartása fenntartható módon. Számotokra készítettük a nulla belépési korlátos forgalomalapú csomagot.</p>
-                </div>
-            </div>
+      <div class="feat">
+        <span class="feat-num">F·03</span>
+        <div class="feat-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <path d="M22 4 L36 11 L36 23 Q36 33 22 40 Q8 33 8 23 L8 11 Z" stroke="var(--sapphire)" stroke-width="1.5" fill="none"/>
+            <path d="M16 22 L20 26 L28 16" stroke="var(--sapphire)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
         </div>
-    </section>
+        <h3>AI-vevő detektálás</h3>
+        <p>Felismeri a botokat 7 heurisztika alapján, és szigorúbb védekezésre vált.</p>
+      </div>
 
-    <section id="arazas" class="py-20 bg-gray-50 border-t border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-extrabold text-darkText mb-4">Átlátható árazás minden méretre</h2>
-                <p class="text-lightText">30 napos pénzvisszafizetési garancia minden csomagra.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-
-                <!-- Free - Hamarosan -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 flex flex-col relative overflow-hidden opacity-75">
-                    <div class="absolute top-3 right-3 bg-gray-100 text-gray-500 text-xs font-bold px-2 py-0.5 rounded-full">Hamarosan</div>
-                    <h3 class="text-xl font-bold mb-2">Free</h3>
-                    <p class="text-lightText text-sm mb-4">Induló boltoknak tesztelésre.</p>
-                    <div class="text-4xl font-extrabold mb-6">$0<span class="text-base font-normal text-lightText">/hó</span></div>
-                    <ul class="text-sm space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2">✔️ Havi ~50 alku</li>
-                        <li class="flex items-center gap-2">✔️ Gemini Flash modell</li>
-                        <li class="flex items-center gap-2">✔️ Web chat csatorna</li>
-                        <li class="flex items-center gap-2">✔️ Automatikus fizetés</li>
-                    </ul>
-                    <button disabled class="w-full border-2 border-gray-300 text-gray-400 font-bold py-2 rounded-xl cursor-not-allowed">Hamarosan elérhető</button>
-                </div>
-
-                <!-- Starter -->
-                <div class="bg-zaffro rounded-2xl p-6 shadow-xl border border-zaffro text-white flex flex-col transform md:-translate-y-4">
-                    <div class="text-xs font-bold uppercase tracking-wider bg-white/20 inline-block px-2 py-1 rounded mb-2 self-start">Legnépszerűbb</div>
-                    <h3 class="text-xl font-bold mb-2">Starter</h3>
-                    <p class="text-white/80 text-sm mb-4">Növekvő forgalomhoz.</p>
-                    <div class="text-4xl font-extrabold mb-6">$39<span class="text-base font-normal text-white/80">/hó</span></div>
-                    <ul class="text-sm space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2">✔️ Chat widget</li>
-                        <li class="flex items-center gap-2">✔️ Gemini Flash modell</li>
-                        <li class="flex items-center gap-2">✔️ Alku + automatikus kupon</li>
-                        <li class="flex items-center gap-2">✔️ Egy kattintásos checkout</li>
-                        <li class="flex items-center gap-2">✔️ AI vevő detektálás</li>
-                        <li class="flex items-center gap-2">✔️ Email csatorna</li>
-                    </ul>
-                    <a href="https://zaffro.lemonsqueezy.com/checkout/buy/9757a35f-cac8-4898-98fb-aa15756b3d01" class="w-full bg-white text-zaffro font-bold py-2 rounded-xl hover:bg-gray-100 transition shadow text-center block">Kiválasztom</a>
-                </div>
-
-                <!-- Pro -->
-                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 flex flex-col">
-                    <h3 class="text-xl font-bold mb-2">Pro</h3>
-                    <p class="text-lightText text-sm mb-4">Maximalizált konverzió.</p>
-                    <div class="text-4xl font-extrabold mb-6">$59<span class="text-base font-normal text-lightText">/hó</span></div>
-                    <ul class="text-sm space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2">✔️ Pro modellek (Gemini Pro, Claude)</li>
-                        <li class="flex items-center gap-2">✔️ Alku + automatikus kupon</li>
-                        <li class="flex items-center gap-2">✔️ Egy kattintásos checkout</li>
-                        <li class="flex items-center gap-2">✔️ AI vevő detektálás</li>
-                        <li class="flex items-center gap-2">✔️ WhatsApp + Messenger</li>
-                        <li class="flex items-center gap-2">✔️ Prioritásos support</li>
-                    </ul>
-                    <a href="https://zaffro.lemonsqueezy.com/checkout/buy/bc53439f-76bd-4345-9a63-a5ec657f1105" class="w-full border-2 border-zaffro text-zaffro font-bold py-2 rounded-xl hover:bg-zaffroLight transition text-center block">Kiválasztom</a>
-                </div>
-
-                <!-- Social -->
-                <div class="bg-gradient-to-br from-white to-zaffroLight rounded-2xl p-6 shadow-sm border border-teal-200 flex flex-col relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-zaffro text-white text-xs font-bold px-3 py-1 rounded-bl-lg">NGO</div>
-                    <h3 class="text-xl font-bold mb-2">Social</h3>
-                    <p class="text-lightText text-sm mb-4">Mi akkor keresünk, ha te is.</p>
-                    <div class="text-3xl font-extrabold mb-6 text-zaffro">$9<span class="text-base font-normal text-lightText">/hó</span> <span class="text-xl">+ 1.5%</span></div>
-                    <ul class="text-sm space-y-3 mb-8 flex-1">
-                        <li class="flex items-center gap-2">✔️ Korlátlan alku (Flash)</li>
-                        <li class="flex items-center gap-2">✔️ Csak sikeres alku után fizetsz</li>
-                        <li class="flex items-center gap-2">✔️ Társadalmi vállalkozásoknak</li>
-                        <li class="flex items-center gap-2">✔️ Személyes onboarding</li>
-                    </ul>
-                    <a href="mailto:sandor@kollabor.org?subject=Zaffro Social csomag érdeklődés" class="w-full border-2 border-zaffro text-zaffro font-bold py-2 rounded-xl hover:bg-white transition text-center block">Érdeklődöm</a>
-                </div>
-            </div>
-
-            <div class="mt-12 text-center max-w-3xl mx-auto bg-zaffroLight border border-zaffro/20 rounded-xl p-4">
-                <p class="text-sm text-darkText font-medium">
-                    <span class="mr-2">🔑</span> <strong>Haladó felhasználó vagy?</strong> Hamarosan: használd a saját LLM API kulcsodat (BYOK) és kapj akár <strong>~50% kedvezményt</strong> a havidíjból!
-                </p>
-            </div>
+      <div class="feat">
+        <span class="soon">Hamarosan</span>
+        <span class="feat-num">F·04</span>
+        <div class="feat-icon">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <rect x="10" y="6" width="24" height="32" rx="2" stroke="var(--sapphire)" stroke-width="1.5"/>
+            <path d="M16 14 L28 14 M16 20 L28 20 M16 26 L24 26" stroke="var(--sapphire)" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="32" cy="34" r="6" fill="var(--saffron)"/>
+            <path d="M29 34 L31 36 L35 32" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
         </div>
-    </section>
+        <h3>Automatikus e-számla</h3>
+        <p>Számlázz.hu integráció — minden tranzakció jogszabályosan, azonnal lekönyvelve.</p>
+      </div>
 
-    <section id="gyik" class="py-20 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-extrabold text-center mb-12">Gyakran Ismételt Kérdések</h2>
-            <div class="space-y-4">
-                <div class="border border-gray-200 rounded-lg p-5">
-                    <h3 class="font-bold text-lg mb-2">Milyen rendszerekkel működik a Zaffro?</h3>
-                    <p class="text-lightText text-sm">Jelenleg a WooCommerce (7.0+) és a WordPress (6.0+) rendszerekkel integrálható teljesen natívan. PHP 8.0+ szükséges a futtatáshoz.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-5">
-                    <h3 class="font-bold text-lg mb-2">Mi történik, ha a bot túl nagy kedvezményt adna?</h3>
-                    <p class="text-lightText text-sm">Biztonságban vagy. Te állítod be az admin felületen a maximális engedmény mértékét (akár rendszerszinten, akár termékenként), a Zaffro ezen sosem megy túl.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-5">
-                    <h3 class="font-bold text-lg mb-2">Biztonságban vannak a vevőim adatai?</h3>
-                    <p class="text-lightText text-sm">Igen! A chat adatok a te helyi WordPress adatbázisodban maradnak, külső szerverre nem kerülnek hosszú távú tárolásra.</p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-5">
-                    <h3 class="font-bold text-lg mb-2">Hogyan történik a számlázás?</h3>
-                    <p class="text-lightText text-sm">A licenc és az előfizetés kezelését a Lemon Squeezy végzi, amiről automatikus számlát kapsz. Magyar B2B számlázáshoz írj nekünk: <a href="mailto:sandor@kollabor.org" class="text-zaffro hover:underline">sandor@kollabor.org</a></p>
-                </div>
-                <div class="border border-gray-200 rounded-lg p-5">
-                    <h3 class="font-bold text-lg mb-2">Kell hozzá szerver vagy fejlesztő?</h3>
-                    <p class="text-lightText text-sm">Nem. Zaffro egy sima WordPress plugin — feltöltöd, aktiválod, beállítod az API kulcsokat. 15 perc, nem kell fejlesztő vagy külön szerver.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class="py-20 bg-zaffro">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Készen állsz, hogy megduplázd a konverziódat?</h2>
-            <p class="text-white/80 text-lg mb-8">Telepítsd az AI értékesítési asszisztenst 15 perc alatt, és hagyd, hogy növelje a bevételeidet.</p>
-            <a href="#arazas" class="inline-block bg-white text-zaffro font-extrabold text-lg py-4 px-10 rounded-xl shadow-xl hover:bg-gray-100 transition transform hover:scale-105">
-                Telepítem a WooCommerce boltomban
-            </a>
-            <p class="text-white/60 text-sm mt-6">30 napos pénzvisszafizetési garancia • Bankkártya szükséges a regisztrációhoz</p>
-        </div>
-    </section>
+<!-- ═══ AUDIENCE ═════════════════════════════════════════════ -->
+<section class="section warm" id="celcsoport">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02 · Célcsoport</div>
+      <h2 class="sec-h2">Kinek <em>ideális</em> választás?</h2>
+      <p class="sec-sub">Három szegmens, akiknek az értékesítés ma egyéni alku — és nem skálázható.</p>
+    </div>
 
-    <footer class="bg-white border-t border-gray-200 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-1">
-                <div class="flex items-center gap-2 mb-4">
-                    <div class="w-6 h-6 bg-zaffro rounded text-white flex items-center justify-center font-bold text-sm">Z</div>
-                    <span class="font-bold text-lg text-zaffro">zaffro.ai</span>
-                </div>
-                <p class="text-sm text-lightText mb-4">
-                    KOLLABOR — 2026<br>
-                    Közös Pont Egyesület
-                </p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 text-darkText">Termék</h4>
-                <ul class="text-sm text-lightText space-y-2">
-                    <li><a href="#arazas" class="hover:text-zaffro transition">Árazás</a></li>
-                    <li><a href="https://github.com/sandor-kollabor/zaffroai/blob/main/INSTALL.md" target="_blank" class="hover:text-zaffro transition">Telepítési Útmutató</a></li>
-                    <li><a href="#gyik" class="hover:text-zaffro transition">GYIK</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 text-darkText">Jogi információk</h4>
-                <ul class="text-sm text-lightText space-y-2">
-                    <li><a href="mailto:sandor@kollabor.org?subject=ÁSZF kérés" class="hover:text-zaffro transition">Általános Szerződési Feltételek</a></li>
-                    <li><a href="mailto:sandor@kollabor.org?subject=Adatvédelmi kérés" class="hover:text-zaffro transition">Adatvédelmi Nyilatkozat</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4 text-darkText">Kapcsolat</h4>
-                <ul class="text-sm text-lightText space-y-2">
-                    <li><a href="mailto:sandor@kollabor.org" class="hover:text-zaffro transition">sandor@kollabor.org</a></li>
-                    <li><a href="https://kollabor.hu" target="_blank" class="hover:text-zaffro transition">kollabor.hu</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-gray-100 text-center text-sm text-lightText">
-            &copy; 2026 Zaffro.ai — Minden jog fenntartva. Fejlesztette: <a href="https://kollabor.hu" class="hover:text-zaffro transition">KOLLABOR</a>
-        </div>
-    </footer>
+    <div class="audience">
+      <div class="aud">
+        <div class="aud-tag">A · Niche kézművesek</div>
+        <h3>Kézművesek és <em>niche márkák</em></h3>
+        <div class="aud-mark"></div>
+        <p>Nincs időd minden érdeklődővel egyénileg egyeztetni éjjel? A Zaffro ismeri a termékedet, és megköti az üzletet helyetted.</p>
+      </div>
+      <div class="aud">
+        <div class="aud-tag">B · B2B & nagykereskedők</div>
+        <h3>B2B és <em>kis nagykereskedők</em></h3>
+        <div class="aud-mark"></div>
+        <p>Azonnali válasz az ajánlatkérésekre. Nagyobb tételek, rendszeres alkuk és egyedi ajánlatok 0–24 órában.</p>
+      </div>
+      <div class="aud">
+        <div class="aud-tag">C · NGO & social</div>
+        <h3>Társadalmi <em>vállalkozások</em></h3>
+        <div class="aud-mark"></div>
+        <p>Személyes kapcsolat fenntartható módon. Nektek készítettük a nulla belépési korlátos forgalomalapú csomagot.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-</body>
+<!-- ═══ PRICING ══════════════════════════════════════════════ -->
+<section class="section" id="arazas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03 · Árazás</div>
+      <h2 class="sec-h2">Átlátható ár <em>minden méretre</em>.</h2>
+      <p class="sec-sub">30 napos pénzvisszafizetési garancia minden csomagra.</p>
+    </div>
+
+    <div class="pricing">
+
+      <div class="price">
+        <span class="price-tag soon">Hamarosan</span>
+        <h3>Free</h3>
+        <p class="price-sub">Induló boltoknak tesztelésre.</p>
+        <div class="price-amount">$0<span class="per">/hó</span></div>
+        <p class="price-extra">&nbsp;</p>
+        <ul>
+          <li>Havi ~50 alku</li>
+          <li>Gemini Flash modell</li>
+          <li>Web chat csatorna</li>
+          <li>Automatikus fizetés</li>
+        </ul>
+        <span class="price-cta disabled">Hamarosan elérhető</span>
+      </div>
+
+      <div class="price featured">
+        <span class="price-tag popular">Legnépszerűbb</span>
+        <h3>Starter</h3>
+        <p class="price-sub">Növekvő forgalomhoz.</p>
+        <div class="price-amount">$39<span class="per">/hó</span></div>
+        <p class="price-extra">&nbsp;</p>
+        <ul>
+          <li>Chat widget</li>
+          <li>Gemini Flash modell</li>
+          <li>Alku + automatikus kupon</li>
+          <li>Egy kattintásos checkout</li>
+          <li>AI vevő detektálás</li>
+          <li>Email csatorna</li>
+        </ul>
+        <a class="price-cta" href="https://zaffro.lemonsqueezy.com/checkout/buy/9757a35f-cac8-4898-98fb-aa15756b3d01">Kiválasztom</a>
+      </div>
+
+      <div class="price">
+        <h3>Pro</h3>
+        <p class="price-sub">Maximalizált konverzió.</p>
+        <div class="price-amount">$59<span class="per">/hó</span></div>
+        <p class="price-extra">&nbsp;</p>
+        <ul>
+          <li>Pro modellek (Gemini Pro, Claude)</li>
+          <li>Alku + automatikus kupon</li>
+          <li>Egy kattintásos checkout</li>
+          <li>AI vevő detektálás</li>
+          <li>WhatsApp + Messenger</li>
+          <li>Prioritásos support</li>
+        </ul>
+        <a class="price-cta" href="https://zaffro.lemonsqueezy.com/checkout/buy/bc53439f-76bd-4345-9a63-a5ec657f1105">Kiválasztom</a>
+      </div>
+
+      <div class="price">
+        <span class="price-tag ngo">NGO</span>
+        <h3>Social</h3>
+        <p class="price-sub">Mi akkor keresünk, ha te is.</p>
+        <div class="price-amount">$9<span class="per">/hó</span></div>
+        <p class="price-extra">+ 1.5% sikerdíj</p>
+        <ul>
+          <li>Korlátlan alku (Flash)</li>
+          <li>Csak sikeres alku után fizetsz</li>
+          <li>Társadalmi vállalkozásoknak</li>
+          <li>Személyes onboarding</li>
+        </ul>
+        <a class="price-cta" href="/cdn-cgi/l/email-protection#afdccec1cbc0ddefc4c0c3c3cecdc0dd81c0ddc890dcdacdc5caccdb92f5cec9c9ddc08ffcc0ccc6cec38fccdcc0c2cec88f6c06ddcbcac4c36a3ecb6c06dc">Érdeklődöm</a>
+      </div>
+
+    </div>
+
+    <div class="price-foot">
+      <span class="key">⌥</span>
+      <span><strong>Haladó felhasználó vagy?</strong> Hamarosan: használd a saját LLM API kulcsodat (BYOK), és kapj akár ~50% kedvezményt a havidíjból.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ══════════════════════════════════════════════════ -->
+<section class="section warm" id="gyik">
+  <div class="wrap-narrow">
+    <div class="sec-head">
+      <div class="sec-num">04 · GYIK</div>
+      <h2 class="sec-h2">Gyakori <em>kérdések</em>.</h2>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>Milyen rendszerekkel működik a Zaffro?<span class="icon"></span></summary>
+        <p class="a">Jelenleg WooCommerce (7.0+) és WordPress (6.0+) rendszerekkel integrálható natívan. PHP 8.0+ szükséges a futtatáshoz.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Mi történik, ha a bot túl nagy kedvezményt adna?<span class="icon"></span></summary>
+        <p class="a">Biztonságban vagy. Te állítod be az admin felületen a maximális engedmény mértékét (akár rendszerszinten, akár termékenként) — a Zaffro ezen sosem megy túl.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Biztonságban vannak a vevőim adatai?<span class="icon"></span></summary>
+        <p class="a">Igen. A chat adatok a te helyi WordPress adatbázisodban maradnak — külső szerverre nem kerülnek hosszú távú tárolásra.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Hogyan történik a számlázás?<span class="icon"></span></summary>
+        <p class="a">A licenc és előfizetés kezelését a Lemon Squeezy végzi, amiről automatikus számlát kapsz. Magyar B2B számlázáshoz írj nekünk: <a href="/cdn-cgi/l/email-protection#9be8faf5fff4e9dbf0f4f7f7faf9f4e9b5f4e9fc" style="color: var(--sapphire); text-decoration: underline;"><span class="__cf_email__" data-cfemail="5a293b343e35281a313536363b3835287435283d">[email&#160;protected]</span></a></p>
+      </details>
+      <details class="faq-item">
+        <summary>Kell hozzá szerver vagy fejlesztő?<span class="icon"></span></summary>
+        <p class="a">Nem. A Zaffro egy sima WordPress plugin — feltöltöd, aktiválod, beállítod az API kulcsokat. 15 perc, nem kell fejlesztő vagy külön szerver.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ════════════════════════════════════════════ -->
+<section class="final-cta">
+  <div class="wrap final-cta-inner">
+    <h2>Készen állsz, hogy <em>megduplázd</em> a konverziódat?</h2>
+    <p>Telepítsd az AI értékesítési asszisztenst 15 perc alatt, és hagyd, hogy növelje a bevételeidet.</p>
+    <a class="btn btn-primary" href="#arazas">
+      Telepítem a WooCommerce boltomban
+      <svg class="arr" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8 L13 8 M9 4 L13 8 L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <div class="foot">30 napos pénzvisszafizetési garancia · Bankkártya szükséges a regisztrációhoz</div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="badge">
+          <svg width="32" height="32" viewBox="0 0 100 100" aria-hidden="true" style="margin-right: 12px;">
+            <g transform="rotate(45 50 50)">
+              <rect x="16" y="16" width="68" height="68" rx="14" fill="var(--sapphire-light)" />
+            </g>
+            <path d="M22 28 L78 28 L78 37 L44 63 L78 63 L78 72 L22 72 L22 63 L56 37 L22 37 Z" fill="var(--sapphire-darker)" />
+          </svg>
+          <span style="font: 700 22px/1 var(--sans); letter-spacing: -0.025em; color: white;">zaffro<span style="color: var(--sapphire-light); font-weight: 500; opacity: 0.85;">.ai</span></span>
+        </div>
+        <p class="footer-tag">AI értékesítési asszisztens kis webshopoknak. Készült: KOLLABOR - 2026.</p>
+      </div>
+
+      <div>
+        <h4>Termék</h4>
+        <ul>
+          <li><a href="#arazas">Árazás</a></li>
+          <li><a href="https://github.com/sandor-kollabor/zaffroai/blob/main/INSTALL.md">Telepítési útmutató</a></li>
+          <li><a href="#gyik">GYIK</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Jogi</h4>
+        <ul>
+          <li><a href="/cdn-cgi/l/email-protection#097a68676d667b4962666565686b667b27667b6e367a7c6b636c6a7d34ca885a534f2962caa07bcaa07a">ÁSZF</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#90e3f1fef4ffe2d0fbfffcfcf1f2ffe2beffe2f7afe3e5f2faf5f3e4add1f4f1e4e65339f4f5fcfdf9b0fb5339e25339e3">Adatvédelem</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Kapcsolat</h4>
+        <ul>
+          <li><a href="/cdn-cgi/l/email-protection#ee9d8f808a819cae858182828f8c819cc0819c89"><span class="__cf_email__" data-cfemail="d2a1b3bcb6bda092b9bdbebeb3b0bda0fcbda0b5">[email&#160;protected]</span></a></li>
+          <li><a href="https://kollabor.hu">kollabor.hu</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Zaffro.ai — Minden jog fenntartva.</span>
+      <span>Fejlesztette: KOLLABOR</span>
+    </div>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
 </html>
